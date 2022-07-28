@@ -96,6 +96,13 @@ const App: React.FC = () => {
         .attr("width", x.bandwidth)
         .attr("fill", "orange")
         .attr("height", 0)
+        .on("mouseover", function (d) {
+          console.log(d.path[0].__data__);
+          select(this).attr("fill", "#00c");
+        })
+        .on("mouseout", function () {
+          select(this).attr("fill", "orange");
+        })
         /**
          * Transitions work similar to CSS Transitions
          * From an inital point, to the conlcuded point
@@ -122,6 +129,10 @@ const App: React.FC = () => {
       .call(axisBottom(x));
 
     svg.append("g").call(axisLeft(y));
+
+    // .on("mouseleave", () => {
+    //   yLine.attr("display", "none");
+    // });
   }, [selection]);
 
   useEffect(() => {
@@ -181,54 +192,9 @@ const App: React.FC = () => {
     }
   }, [data]);
 
-  // function onMouseOver(d: any) {
-  //   select("rect")
-  //     .transition()
-  //     .duration(400)
-  //     .attr("width", x.bandwidth() + 5)
-  //     .attr("y", function (d: any) {
-  //       return y(d.units) - 10;
-  //     })
-  //     .attr("height", function (d: any, i: any) {
-  //       return dimensions.height - y(d.units) + 10;
-  //     });
-  //   // select(svgRef)
-  //   //   .append("text")
-  //   //   .attr("class", "val") // add class to text label
-  //   //   .attr("x", function (d: any) {
-  //   //     return x(d.name);
-  //   //   })
-  //   //   .attr("y", function () {
-  //   //     return y(d.value) - 15;
-  //   //   })
-  //   //   .text(function () {
-  //   //     return ["$" + d.value]; // Value of the text
-  //   //   });
-  // }
-  // function onMouseOut(d: any, i: any) {
-  //   select("rect")
-  //     .transition()
-  //     .duration(400)
-  //     .attr("width", x.bandwidth())
-  //     .attr("y", function (d: any) {
-  //       return y(d.units);
-  //     })
-  //     .attr("height", function (d: any) {
-  //       return dimensions.height - y(d.units);
-  //     });
-
-  //   selectAll("rect").remove();
-  // }
   /**
    * functions to help add and remove elements to show transitions
    */
-  const addData = () => {
-    const dataToAdd = {
-      name: randomstring.generate(),
-      units: Math.round(Math.random() * 80 + 20),
-    };
-    setData([...data, dataToAdd]);
-  };
 
   const removeData = () => {
     if (data.length === 0) {
