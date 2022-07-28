@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { select, selectAll, Selection } from "d3-selection";
 import { scaleLinear, scaleBand } from "d3-scale";
 import { max } from "d3-array";
+import { axisBottom, axisLeft } from "d3-axis";
 import "d3-transition";
 import { easeElastic } from "d3-ease";
 import randomstring from "randomstring";
@@ -110,6 +111,17 @@ const App: React.FC = () => {
         // .on("mouseleave", onMouseOut)
         .attr("y", (d) => y(d.units));
     }
+    const margin = { top: 20, right: 30, bottom: 30, left: 30 };
+    const svg = select(svgRef.current)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg
+      .append("g")
+      .attr("transform", "translate(0," + 100 + ")")
+      .call(axisBottom(x));
+
+    svg.append("g").call(axisLeft(y));
   }, [selection]);
 
   useEffect(() => {
