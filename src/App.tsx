@@ -86,6 +86,7 @@ const App: React.FC = () => {
     if (!selection) {
       setSelection(select(svgRef.current));
     } else {
+      const tooltip = select("#tooltip");
       selection
         .selectAll("rect")
         .data(data)
@@ -97,8 +98,14 @@ const App: React.FC = () => {
         .attr("fill", "orange")
         .attr("height", 0)
         .on("mouseover", function (d) {
+          console.log(d);
           console.log(d.path[0].__data__);
           select(this).attr("fill", "#00c");
+          tooltip.select("#count").text(d.path[0].__data__.units);
+          tooltip.style(
+            "transform"
+            // `translate(calc(${d.clientX}px), calc(${d.clientY}px))`
+          );
         })
         .on("mouseout", function () {
           select(this).attr("fill", "orange");
@@ -220,6 +227,14 @@ const App: React.FC = () => {
 
   return (
     <>
+      <div id="tooltip" className="tooltip">
+        <div className="tooltip-title">
+          <span id="title" />
+        </div>
+        <div className="tooltip-value">
+          <span id="count" />
+        </div>
+      </div>
       <svg ref={svgRef} width={dimensions.width} height={dimensions.height} />
       <button onClick={removeData}>Remove Data</button>
       <form onSubmit={submit} style={{ paddingTop: "1rem" }}>
