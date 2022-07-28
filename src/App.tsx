@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { select, Selection } from "d3-selection";
+import { select, selectAll, Selection } from "d3-selection";
 import { scaleLinear, scaleBand } from "d3-scale";
 import { max } from "d3-array";
 import "d3-transition";
@@ -30,6 +30,32 @@ let initialData = [
   {
     name: "hogera",
     units: 59,
+  },
+];
+let newData = [
+  {
+    name: "foo",
+    units: 104,
+  },
+  {
+    name: "bar",
+    units: 95,
+  },
+  {
+    name: "baz",
+    units: 32,
+  },
+  {
+    name: "hoge",
+    units: 64,
+  },
+  {
+    name: "piyo",
+    units: 88,
+  },
+  {
+    name: "hogera",
+    units: 10,
   },
 ];
 const App: React.FC = () => {
@@ -80,16 +106,20 @@ const App: React.FC = () => {
         .delay((_, i) => i * 100)
         .ease(easeElastic)
         .attr("height", (d) => dimensions.height - y(d.units))
+        // .on("mouseenter", onMouseOver)
+        // .on("mouseleave", onMouseOut)
         .attr("y", (d) => y(d.units));
     }
   }, [selection]);
 
   useEffect(() => {
     if (selection) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       x = scaleBand()
         .domain(data.map((d) => d.name))
         .range([0, dimensions.width])
         .padding(0.05);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       y = scaleLinear()
         .domain([0, max(data, (d) => d.units)!])
         .range([dimensions.height, 0]);
@@ -129,6 +159,8 @@ const App: React.FC = () => {
         .attr("y", dimensions.height)
         .transition()
         .delay(400)
+        // .on("mouseover", onMouseOver)
+        // .on("mouseout", onMouseOut)
         .duration(500)
         .ease(easeElastic)
         .attr("height", (d) => dimensions.height - y(d.units))
@@ -137,6 +169,44 @@ const App: React.FC = () => {
     }
   }, [data]);
 
+  // function onMouseOver(d: any) {
+  //   select("rect")
+  //     .transition()
+  //     .duration(400)
+  //     .attr("width", x.bandwidth() + 5)
+  //     .attr("y", function (d: any) {
+  //       return y(d.units) - 10;
+  //     })
+  //     .attr("height", function (d: any, i: any) {
+  //       return dimensions.height - y(d.units) + 10;
+  //     });
+  //   // select(svgRef)
+  //   //   .append("text")
+  //   //   .attr("class", "val") // add class to text label
+  //   //   .attr("x", function (d: any) {
+  //   //     return x(d.name);
+  //   //   })
+  //   //   .attr("y", function () {
+  //   //     return y(d.value) - 15;
+  //   //   })
+  //   //   .text(function () {
+  //   //     return ["$" + d.value]; // Value of the text
+  //   //   });
+  // }
+  // function onMouseOut(d: any, i: any) {
+  //   select("rect")
+  //     .transition()
+  //     .duration(400)
+  //     .attr("width", x.bandwidth())
+  //     .attr("y", function (d: any) {
+  //       return y(d.units);
+  //     })
+  //     .attr("height", function (d: any) {
+  //       return dimensions.height - y(d.units);
+  //     });
+
+  //   selectAll("rect").remove();
+  // }
   /**
    * functions to help add and remove elements to show transitions
    */
@@ -159,6 +229,10 @@ const App: React.FC = () => {
     e.preventDefault();
     setData([...data, { name, units: parseInt(unit) }]);
   };
+  const changeData = (e: React.FormEvent) => {
+    e.preventDefault();
+    setData(newData);
+  };
 
   return (
     <>
@@ -171,6 +245,7 @@ const App: React.FC = () => {
         <input value={unit} onChange={(e) => setUnit(e.target.value)} />
         <button type="submit">Submit</button>
       </form>
+      <button onClick={(e) => changeData(e)}>change Data</button>
     </>
   );
 };
