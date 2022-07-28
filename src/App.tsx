@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
-import { select, selectAll, Selection } from "d3-selection";
+import { select, selectAll, Selection, pointer } from "d3-selection";
 import { scaleLinear, scaleBand } from "d3-scale";
+// import { event } from "d3";
 import { max } from "d3-array";
 import { axisBottom, axisLeft } from "d3-axis";
 import "d3-transition";
@@ -99,13 +100,22 @@ const App: React.FC = () => {
         .attr("height", 0)
         .on("mouseover", function (d) {
           console.log(d);
-          console.log(d.path[0].__data__);
+          // console.log(d.path[0].__data__);
           select(this).attr("fill", "#00c");
           tooltip.select("#count").text(d.path[0].__data__.units);
+          // const xAxis = scales.xScales
           tooltip.style(
-            "transform"
-            // `translate(calc(${d.clientX}px), calc(${d.clientY}px))`
+            "transform",
+            `translate(calc( ${d.clientX}px), calc(-100% + ${
+              // dimensions.width + d.path[0].__data__.units
+              d.clientY
+            }px))`
           );
+          // .style("top", d.clientY - 70 + "px");
+          // tooltip
+          //   .style("left", d.pageX - 50 + "px")
+          //   .style("top", d.pageY - 70 + "px")
+          //   .style("display", "inline-block");
         })
         .on("mouseout", function () {
           select(this).attr("fill", "orange");
@@ -227,12 +237,28 @@ const App: React.FC = () => {
 
   return (
     <>
-      <div id="tooltip" className="tooltip">
+      <div
+        id="tooltip"
+        className="tooltip"
+        style={{
+          backgroundColor: "black",
+          border: "1px solid white",
+          borderRadius: "13px",
+          flexWrap: "wrap",
+        }}
+      >
         <div className="tooltip-title">
           <span id="title" />
         </div>
-        <div className="tooltip-value">
-          <span id="count" />
+        <div
+          className="tooltip-value"
+          style={{
+            display: "inline-block",
+            position: "fixed",
+            backgroundColor: "black",
+          }}
+        >
+          <span id="count" style={{ color: "white", margin: "1rem" }} />
         </div>
       </div>
       <svg ref={svgRef} width={dimensions.width} height={dimensions.height} />
