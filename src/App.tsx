@@ -60,7 +60,7 @@ let newData = [
   },
 ];
 const App: React.FC = () => {
-  const dimensions = { width: 800, height: 500 };
+  const dimensions = { width: 800, height: 550 };
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [data, setData] = useState(initialData);
   const [name, setName] = useState("");
@@ -106,7 +106,7 @@ const App: React.FC = () => {
         .duration(700)
         .delay((_, i) => i * 100)
         .ease(easeElastic)
-        .attr("height", (d) => dimensions.height - y(d.units))
+        .attr("height", (d) => dimensions.height - 30 - y(d.units))
         // .on("mouseenter", onMouseOver)
         // .on("mouseleave", onMouseOut)
         .attr("y", (d) => y(d.units));
@@ -118,7 +118,7 @@ const App: React.FC = () => {
 
     svg
       .append("g")
-      .attr("transform", "translate(0," + 100 + ")")
+      .attr("transform", "translate(0," + 500 + ")")
       .call(axisBottom(x));
 
     svg.append("g").call(axisLeft(y));
@@ -159,7 +159,7 @@ const App: React.FC = () => {
         .attr("x", (d) => x(d.name)!)
         .attr("y", (d) => y(d.units))
         .attr("width", x.bandwidth)
-        .attr("height", (d) => dimensions.height - y(d.units))
+        .attr("height", (d) => dimensions.height - 30 - y(d.units))
         .attr("fill", "orange");
 
       rects
@@ -175,7 +175,7 @@ const App: React.FC = () => {
         // .on("mouseout", onMouseOut)
         .duration(500)
         .ease(easeElastic)
-        .attr("height", (d) => dimensions.height - y(d.units))
+        .attr("height", (d) => dimensions.height - 30 - y(d.units))
         .attr("y", (d) => y(d.units))
         .attr("fill", "orange");
     }
@@ -239,7 +239,13 @@ const App: React.FC = () => {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    setData([...data, { name, units: parseInt(unit) }]);
+    setData([
+      ...data,
+      {
+        name: name === "" ? Math.random().toString() : name,
+        units: parseInt(unit),
+      },
+    ]);
   };
   const changeData = (e: React.FormEvent) => {
     e.preventDefault();
@@ -250,7 +256,7 @@ const App: React.FC = () => {
     <>
       <svg ref={svgRef} width={dimensions.width} height={dimensions.height} />
       <button onClick={removeData}>Remove Data</button>
-      <form onSubmit={submit}>
+      <form onSubmit={submit} style={{ paddingTop: "1rem" }}>
         Name:
         <input value={name} onChange={(e) => setName(e.target.value)} />
         Units:
