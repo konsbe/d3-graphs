@@ -261,7 +261,6 @@ const BarChart: React.FC = () => {
         <input value={unit} onChange={(e) => setUnit(e.target.value)} />
         <button type="submit">Submit</button>
       </form>
-      <button onClick={(e) => changeData(e)}>change Data</button>
       <div>
         <input
           type="radio"

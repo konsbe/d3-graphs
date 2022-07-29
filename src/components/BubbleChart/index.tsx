@@ -19,7 +19,7 @@ const BubbleChart = (): JSX.Element => {
     width = 1200 - margin.left - margin.right,
     height = 420 - margin.top - margin.bottom;
 
-  var showTooltip = function (d: any) {
+  var showTooltip = function (d: any, selection: any) {
     tooltip.transition().duration(200);
     tooltip
       .style("opacity", 1)
@@ -29,6 +29,13 @@ const BubbleChart = (): JSX.Element => {
         "transform",
         `translate(calc(-90px + ${d.clientX}px), calc(${d.clientY}px))`
       );
+    // selection
+    //   .append("g")
+    //   .append("rect")
+    //   .attr("class", "dotted")
+    //   .attr("stroke-width", "1px")
+    //   .attr("width", ".5px")
+    //   .attr("height", dimensions.height - 1000);
   };
   var moveTooltip = function (d: any) {
     tooltip.style(
@@ -72,7 +79,7 @@ const BubbleChart = (): JSX.Element => {
           return y(d.lifeExp);
         })
         .attr("r", function (d: any) {
-          return z(d.pop);
+          return z(Number(d.pop) * 2);
         })
         .attr("fill", function (d: any): any {
           if (d.continent === "Asia") {
@@ -87,7 +94,7 @@ const BubbleChart = (): JSX.Element => {
             return "#Fff931";
           }
         })
-        .on("mouseover", showTooltip)
+        .on("mouseover", (d) => showTooltip(d, selection))
         .on("mousemove", moveTooltip)
         .on("mouseout", hideTooltip)
         .style("opacity", "0.7")
