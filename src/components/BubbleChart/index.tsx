@@ -11,7 +11,7 @@ const BubbleChart = (): JSX.Element => {
   const dimensions = { width: 1200, height: 550 };
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [data, setData] = useState(initialData);
-  const tooltip = select("#tooltip");
+  const tooltip = select("#tooltip").style("opacity", 0);
 
   // csv = "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/4_ThreeNum.csv"
 
@@ -107,14 +107,12 @@ const BubbleChart = (): JSX.Element => {
 
   return (
     <div style={{ marginLeft: "100px" }}>
-      <div style={{ width: "15%" }}>
-        <div id="tooltip" className="tooltip">
-          <div className="tooltip-title">
-            <span id="title" />
-          </div>
-          <div className="tooltip-value" style={{ backgroundColor: "black" }}>
-            <span id="count" style={{ color: "white", margin: "1rem" }} />
-          </div>
+      <div id="tooltip" className="tooltip" style={{ width: "15%" }}>
+        <div className="tooltip-title">
+          <span id="title" />
+        </div>
+        <div className="tooltip-value" style={{ backgroundColor: "black" }}>
+          <span id="count" style={{ color: "white", margin: "1rem" }} />
         </div>
       </div>
       <svg ref={svgRef} width={dimensions.width} height={dimensions.height} />

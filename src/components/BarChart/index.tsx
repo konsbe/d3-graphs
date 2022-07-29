@@ -87,7 +87,7 @@ const BarChart: React.FC = () => {
     if (!selection) {
       setSelection(select(svgRef.current));
     } else {
-      const tooltip = select("#tooltip");
+      const tooltip = select("#tooltip").style("opacity", 0);
       selection
         .selectAll("rect")
         .data(data)
@@ -98,18 +98,24 @@ const BarChart: React.FC = () => {
         .attr("width", x.bandwidth)
         .attr("fill", "orange")
         .attr("height", -30)
+        /**
+         * onmouseover with keyword this works perfect
+         */
         .on("mouseover", function (d) {
           console.log(d);
           // console.log(d.path[0].__data__);
           select(this).attr("fill", "#00c");
           tooltip.select("#count").text(d.path[0].__data__.units);
-          tooltip.style(
-            "transform",
-            `translate(calc( ${d.clientX}px), calc(-100% + ${d.clientY}px))`
-          );
+          tooltip
+            .style(
+              "transform",
+              `translate(calc( ${d.clientX}px), calc(-100% + ${d.clientY}px))`
+            )
+            .style("opacity", 1);
         })
         .on("mouseout", function () {
           select(this).attr("fill", "orange");
+          tooltip.style("opacity", 0);
         })
         /**
          * Transitions work similar to CSS Transitions
