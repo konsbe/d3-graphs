@@ -13,21 +13,39 @@ const BubbleChart = (): JSX.Element => {
   const dimensions = { width: 1200, height: 550 };
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [data, setData] = useState(initialData);
+  const tooltip = select("#tooltip");
 
   // csv = "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/4_ThreeNum.csv"
 
   var margin = { top: 10, right: 20, bottom: 30, left: 50 },
     width = 1200 - margin.left - margin.right,
     height = 420 - margin.top - margin.bottom;
-
-  // var svg = d3
-  //   .select("#my_dataviz")
-  //   .append("svg")
-  //   .attr("width", width + margin.left + margin.right)
-  //   .attr("height", height + margin.top + margin.bottom)
-  //   .append("g")
-  //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+  var showTooltip = function (d: any) {
+    tooltip.transition().duration(200);
+    tooltip
+      .style("opacity", 1)
+      .select("#count")
+      .text(d.path[0].__data__.country + ": " + d.path[0].__data__.gdpPercap)
+      .style("left", function (): any {
+        select(this).attr("left", 30 + "px");
+      })
+      .style("top", function (): any {
+        select(this).attr("top", 30 + "px");
+      });
+  };
+  // select(this).
+  var moveTooltip = function (d: any) {
+    tooltip
+      .style("left", function (): any {
+        select(this).attr("left", 30 + "px");
+      })
+      .style("top", function (): any {
+        select(this).attr("top", 30 + "px");
+      });
+  };
+  var hideTooltip = function (d: any) {
+    tooltip.transition().duration(200).style("opacity", 0);
+  };
   let x = scaleLinear().domain([0, 10000]).range([0, width]);
   // Add Y axis
   let y = scaleLinear().domain([35, 90]).range([dimensions.height, 0]);
@@ -43,8 +61,6 @@ const BubbleChart = (): JSX.Element => {
     undefined
   >>(null);
 
-  // append the svg object to the body of the page
-
   useEffect(() => {
     if (!selection) {
       setSelection(select(svgRef.current));
@@ -55,6 +71,7 @@ const BubbleChart = (): JSX.Element => {
         .data(data)
         .enter()
         .append("circle")
+        .attr("class", "bubbles")
         .attr("cx", function (d: any) {
           return x(d.gdpPercap);
         })
@@ -64,7 +81,25 @@ const BubbleChart = (): JSX.Element => {
         .attr("r", function (d: any) {
           return z(d.pop);
         })
-        .style("fill", "#69b3a2")
+        .attr("fill", function (d: any): any {
+          if (d.continent === "Asia") {
+            return "#2DD7EB";
+          } else if (d.continent === "Europe") {
+            return "#3CEB2D";
+          } else if (d.continent === "Americas") {
+            return "#F55431";
+          } else if (d.continent === "Africa") {
+            return "#F33485";
+          } else if (d.continent === "Oceania") {
+            return "#Fff931";
+          }
+        })
+        .on("mouseover", showTooltip)
+        .on("mousemove", moveTooltip)
+        .on("mouseout", hideTooltip)
+        // .style("fill", function (this: SVGCircleElement, d: any) {
+        //   return myColor(d.continent);
+        // })
         .style("opacity", "0.7")
         .attr("stroke", "black");
     }
@@ -82,6 +117,32 @@ const BubbleChart = (): JSX.Element => {
 
   return (
     <div style={{ marginLeft: "100px" }}>
+      <div>
+        <div
+          id="tooltip"
+          className="tooltip"
+          style={{
+            backgroundColor: "black",
+            border: "1px solid black",
+            borderRadius: "13px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div className="tooltip-title">
+            <span id="title" />
+          </div>
+          <div
+            className="tooltip-value"
+            style={{
+              display: "inline-block",
+              position: "fixed",
+              backgroundColor: "black",
+            }}
+          >
+            <span id="count" style={{ color: "white", margin: "1rem" }} />
+          </div>
+        </div>
+      </div>
       <svg ref={svgRef} width={dimensions.width} height={dimensions.height} />
     </div>
   );

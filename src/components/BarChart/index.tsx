@@ -70,7 +70,8 @@ const BarChart: React.FC = () => {
   let x = scaleBand()
     .domain(data.map((d) => d.name))
     .range([0, dimensions.width])
-    .padding(0.05);
+    .padding(0.23);
+  // let x = scaleLinear().domain([0, 10000]).range([0, dimensions.width]);
 
   let y = scaleLinear()
     .domain([0, max(data, (d) => d.units)!])
@@ -97,7 +98,7 @@ const BarChart: React.FC = () => {
         .attr("y", dimensions.height)
         .attr("width", x.bandwidth)
         .attr("fill", "orange")
-        .attr("height", 0)
+        .attr("height", -30)
         .on("mouseover", function (d) {
           console.log(d);
           // console.log(d.path[0].__data__);
@@ -158,7 +159,7 @@ const BarChart: React.FC = () => {
       x = scaleBand()
         .domain(data.map((d) => d.name))
         .range([0, dimensions.width])
-        .padding(0.05);
+        .padding(0.23);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       y = scaleLinear()
         .domain([0, max(data, (d) => d.units)!])
@@ -171,7 +172,7 @@ const BarChart: React.FC = () => {
         .transition()
         .ease(easeElastic)
         .duration(400)
-        .attr("height", 0)
+        .attr("height", -30)
         .attr("y", dimensions.height)
         .remove();
 
@@ -195,7 +196,7 @@ const BarChart: React.FC = () => {
         .append("rect")
         .attr("x", (d) => x(d.name)!)
         .attr("width", x.bandwidth)
-        .attr("height", 0)
+        .attr("height", -30)
         .attr("y", dimensions.height)
         .transition()
         .delay(400)
@@ -236,13 +237,13 @@ const BarChart: React.FC = () => {
   };
 
   return (
-    <>
+    <div>
       <div
         id="tooltip"
         className="tooltip"
         style={{
           backgroundColor: "black",
-          border: "1px solid white",
+          border: "1px solid black",
           borderRadius: "13px",
           flexWrap: "wrap",
         }}
@@ -294,7 +295,7 @@ const BarChart: React.FC = () => {
         />{" "}
         Other
       </div>
-    </>
+    </div>
   );
 };
 
