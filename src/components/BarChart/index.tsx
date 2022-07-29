@@ -71,7 +71,6 @@ const BarChart: React.FC = () => {
     .domain(data.map((d) => d.name))
     .range([0, dimensions.width])
     .padding(0.23);
-  // let x = scaleLinear().domain([0, 10000]).range([0, dimensions.width]);
 
   let y = scaleLinear()
     .domain([0, max(data, (d) => d.units)!])
@@ -104,19 +103,10 @@ const BarChart: React.FC = () => {
           // console.log(d.path[0].__data__);
           select(this).attr("fill", "#00c");
           tooltip.select("#count").text(d.path[0].__data__.units);
-          // const xAxis = scales.xScales
           tooltip.style(
             "transform",
-            `translate(calc( ${d.clientX}px), calc(-100% + ${
-              // dimensions.width + d.path[0].__data__.units
-              d.clientY
-            }px))`
+            `translate(calc( ${d.clientX}px), calc(-100% + ${d.clientY}px))`
           );
-          // .style("top", d.clientY - 70 + "px");
-          // tooltip
-          //   .style("left", d.pageX - 50 + "px")
-          //   .style("top", d.pageY - 70 + "px")
-          //   .style("display", "inline-block");
         })
         .on("mouseout", function () {
           select(this).attr("fill", "orange");
@@ -147,10 +137,6 @@ const BarChart: React.FC = () => {
       .call(axisBottom(x));
 
     svg.append("g").call(axisLeft(y));
-
-    // .on("mouseleave", () => {
-    //   yLine.attr("display", "none");
-    // });
   }, [selection]);
 
   useEffect(() => {
@@ -200,8 +186,6 @@ const BarChart: React.FC = () => {
         .attr("y", dimensions.height)
         .transition()
         .delay(400)
-        // .on("mouseover", onMouseOver)
-        // .on("mouseout", onMouseOut)
         .duration(500)
         .ease(easeElastic)
         .attr("height", (d) => dimensions.height - 30 - y(d.units))

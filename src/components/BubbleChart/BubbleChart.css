@@ -1,0 +1,8 @@
+#d3demo{
+	width: 100vw;
+	height: 50vh;
+}
+.bubbles:hover {
+	stroke: red;
+	stroke-width:2px;
+  }

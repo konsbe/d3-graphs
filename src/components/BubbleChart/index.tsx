@@ -1,14 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-import { select, selectAll, Selection, pointer } from "d3-selection";
-import { scaleLinear, scaleBand } from "d3-scale";
+import { select, Selection } from "d3-selection";
+import { scaleLinear } from "d3-scale";
 // import { event } from "d3";
-import { max } from "d3-array";
 import { axisBottom, axisLeft } from "d3-axis";
 import "d3-transition";
-import { easeElastic } from "d3-ease";
 import * as d3 from "d3";
 import { initialData } from "./data";
-
+import "./BubbleChart.css";
 const BubbleChart = (): JSX.Element => {
   const dimensions = { width: 1200, height: 550 };
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -20,28 +18,23 @@ const BubbleChart = (): JSX.Element => {
   var margin = { top: 10, right: 20, bottom: 30, left: 50 },
     width = 1200 - margin.left - margin.right,
     height = 420 - margin.top - margin.bottom;
+
   var showTooltip = function (d: any) {
     tooltip.transition().duration(200);
     tooltip
       .style("opacity", 1)
       .select("#count")
       .text(d.path[0].__data__.country + ": " + d.path[0].__data__.gdpPercap)
-      .style("left", function (): any {
-        select(this).attr("left", 30 + "px");
-      })
-      .style("top", function (): any {
-        select(this).attr("top", 30 + "px");
-      });
+      .style(
+        "transform",
+        `translate(calc(-90px + ${d.clientX}px), calc(${d.clientY}px))`
+      );
   };
-  // select(this).
   var moveTooltip = function (d: any) {
-    tooltip
-      .style("left", function (): any {
-        select(this).attr("left", 30 + "px");
-      })
-      .style("top", function (): any {
-        select(this).attr("top", 30 + "px");
-      });
+    tooltip.style(
+      "transform",
+      `translate(calc(-90px + ${d.clientX}px), calc(${d.clientY}px))`
+    );
   };
   var hideTooltip = function (d: any) {
     tooltip.transition().duration(200).style("opacity", 0);
@@ -97,9 +90,6 @@ const BubbleChart = (): JSX.Element => {
         .on("mouseover", showTooltip)
         .on("mousemove", moveTooltip)
         .on("mouseout", hideTooltip)
-        // .style("fill", function (this: SVGCircleElement, d: any) {
-        //   return myColor(d.continent);
-        // })
         .style("opacity", "0.7")
         .attr("stroke", "black");
     }
@@ -117,28 +107,12 @@ const BubbleChart = (): JSX.Element => {
 
   return (
     <div style={{ marginLeft: "100px" }}>
-      <div>
-        <div
-          id="tooltip"
-          className="tooltip"
-          style={{
-            backgroundColor: "black",
-            border: "1px solid black",
-            borderRadius: "13px",
-            flexWrap: "wrap",
-          }}
-        >
+      <div style={{ width: "15%" }}>
+        <div id="tooltip" className="tooltip">
           <div className="tooltip-title">
             <span id="title" />
           </div>
-          <div
-            className="tooltip-value"
-            style={{
-              display: "inline-block",
-              position: "fixed",
-              backgroundColor: "black",
-            }}
-          >
+          <div className="tooltip-value" style={{ backgroundColor: "black" }}>
             <span id="count" style={{ color: "white", margin: "1rem" }} />
           </div>
         </div>
