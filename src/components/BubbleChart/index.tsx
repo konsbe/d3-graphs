@@ -5,7 +5,7 @@ import { scaleLinear } from "d3-scale";
 import { axisBottom, axisLeft } from "d3-axis";
 import "d3-transition";
 import * as d3 from "d3";
-import { initialData } from "./data";
+import { initialData } from "./countries";
 import "./BubbleChart.css";
 const BubbleChart = (): JSX.Element => {
   const dimensions = { width: 1200, height: 550 };

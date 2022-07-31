@@ -66,7 +66,7 @@ const BarChart: React.FC = () => {
   const [data, setData] = useState(initialData);
   const [name, setName] = useState("");
   const [unit, setUnit] = useState("");
-
+  const [padTo, setPadTo] = useState(0);
   let x = scaleBand()
     .domain(data.map((d) => d.name))
     .range([0, dimensions.width])
@@ -151,7 +151,7 @@ const BarChart: React.FC = () => {
       x = scaleBand()
         .domain(data.map((d) => d.name))
         .range([0, dimensions.width])
-        .padding(0.23);
+        .padding(0.23 + padTo);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       y = scaleLinear()
         .domain([0, max(data, (d) => d.units)!])
@@ -213,6 +213,7 @@ const BarChart: React.FC = () => {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    setPadTo(data.length / 50);
     setData([
       ...data,
       {
