@@ -132,7 +132,7 @@ const BarChart: React.FC = () => {
         // .on("mouseleave", onMouseOut)
         .attr("y", (d) => y(d.units));
     }
-    const margin = { top: 20, right: 30, bottom: 30, left: 30 };
+    const margin = { top: 50, right: 50, bottom: 50, left: 50 };
     const svg = select(svgRef.current)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
